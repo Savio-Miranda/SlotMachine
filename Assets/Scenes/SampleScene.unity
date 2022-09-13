@@ -6253,7 +6253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   play: {fileID: 489977314}
   pattern: {fileID: 1507197224}
-  spriteList: 
   drops:
   - {fileID: 540800910}
   - {fileID: 780463022}

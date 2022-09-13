@@ -12,8 +12,6 @@ public class Elements : MonoBehaviour
     public GameObject[] drops;
     public Sprite[] newSprites;
     int[] numbersRand = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    
-    // SlotNum se refere as caixinhas de texto do canvas;
     public float time;
 
     void Update()
