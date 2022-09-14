@@ -6,49 +6,67 @@ using TMPro;
 
 public class Elements : MonoBehaviour
 {
-    public GameObject play;
-    public GameObject pattern;
-    private List<int> spriteList = new List<int>();
-    public GameObject[] drops;
+    public GameObject PatternButton;
     public Sprite[] newSprites;
-    int[] numbersRand = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    private List<int> spriteList = new List<int>();
+    private List<List<Transform>> columnsList = new List<List<Transform>>();
+    private int[] numberOfElements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     public float time;
 
     void Update()
     {
         foreach (Transform child in transform)
         {
-            child.GetComponent<Image>().sprite = newSprites[Random.Range (0, numbersRand.Length)];
+            child.GetComponent<Image>().sprite = newSprites[Random.Range (0, numberOfElements.Length)];
         }
     }
     
     public void Pattern()
     {
-        bool isPatternActive = pattern.GetComponent<Button>().IsActive();
+        bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
         
-        foreach (GameObject dropdown in drops)
-        {
-            int dropdownValue = dropdown.GetComponent<TMP_Dropdown>().value;
-            if (dropdownValue == 0)
-            {
-                return;
-            }
-            else
-            {
-                spriteList.Add(dropdownValue);
-            }
-        }
-
         if (isPatternActive)
         {
-            transform.GetChild(6).GetComponent<Image>().sprite = newSprites[spriteList[0] - 1];
-            transform.GetChild(7).GetComponent<Image>().sprite = newSprites[spriteList[1] - 1];
-            transform.GetChild(8).GetComponent<Image>().sprite = newSprites[spriteList[2] - 1];
+            int countChildren = transform.childCount;
+        
+            // Receiving columns
+            for (int i = 0; i < 2; i++)
+            {
+                columnsList.Add(ColumnsMaker(countChildren, 3));
+            }
+            
+            // Receiving the pattern of the columns (Futurely through API)
+            foreach (List<Transform> column in columnsList)
+            {
+                foreach (Transform image in column)
+                {
+                    image.GetComponent<Image>().sprite = newSprites[5];
+                }
+            }
         }
         else
         {
             return;
         }
+    }
+
+    // Create the columns
+    private List<Transform> ColumnsMaker(int elements, int step)
+    {
+
+        int counter = 0;
+        List<Transform> column = new List<Transform>();
+        
+        for (int i = 0; i < elements; i++)
+        {
+            column.Add(transform.GetChild(i));
+            counter++;
+            if (counter >= step)
+            {
+                return column;
+            }
+        }
+        return column;
     }
 
     public void EnableOn()
