@@ -2732,8 +2732,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90fc9a7e947e4c74fa0556ace72955a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  time: 0
   PatternButton: {fileID: 1507197224}
-  newSprites:
+  allSprites:
   - {fileID: 21300000, guid: f0acf782f8f06844a87bed0600c05b80, type: 3}
   - {fileID: 21300000, guid: 6b40600d3ec0c9b4cbac9d749fdb50bf, type: 3}
   - {fileID: 21300000, guid: eade215b06e0bfb4c8956cb0480c703d, type: 3}
@@ -2743,7 +2744,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7b212079ccb367241bb2864cfb67e59f, type: 3}
   - {fileID: 21300000, guid: 9a269fe85207013499a5b064f0ba7523, type: 3}
   - {fileID: 21300000, guid: 967791626d26b9e4ab79beec4e1fdf43, type: 3}
-  time: 0
 --- !u!1 &2147342519
 GameObject:
   m_ObjectHideFlags: 0

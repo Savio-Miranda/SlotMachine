@@ -6,18 +6,29 @@ using TMPro;
 
 public class Elements : MonoBehaviour
 {
+    public float time;
     public GameObject PatternButton;
-    public Sprite[] newSprites;
+    public Sprite[] allSprites;
     private List<int> spriteList = new List<int>();
     private List<List<Transform>> columnsList = new List<List<Transform>>();
+    private List<List<int>> patternsList;
     private int[] numberOfElements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    public float time;
+
+    void Start()
+    {
+        List<int> pn1 = new List<int>{1, 1, 1};
+        List<int> pn2 = new List<int>{2, 2, 2};
+        List<int> pn3 = new List<int>{3, 3, 3};
+        List<int> pn4 = new List<int>{4, 4, 4};
+        List<int> pn5 = new List<int>{5, 5, 5};
+        patternsList = new List<List<int>>{pn1, pn2, pn3, pn4, pn5};
+    }
 
     void Update()
     {
         foreach (Transform child in transform)
         {
-            child.GetComponent<Image>().sprite = newSprites[Random.Range (0, numberOfElements.Length)];
+            child.GetComponent<Image>().sprite = allSprites[Random.Range (0, numberOfElements.Length)];
         }
     }
     
@@ -26,45 +37,46 @@ public class Elements : MonoBehaviour
         bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
         
         if (isPatternActive)
-        {
-            int countChildren = transform.childCount;
-        
+        {        
+            int counter = 0;
             // Receiving columns
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
-                columnsList.Add(ColumnsMaker(countChildren, 3));
+                columnsList.Add(ColumnBuilder(transform, counter));
+                counter += 3;
             }
-            
-            // Receiving the pattern of the columns (Futurely through API)
+            int firstIndex = 0;
             foreach (List<Transform> column in columnsList)
             {
-                foreach (Transform image in column)
+                if (firstIndex >= patternsList.Count)
                 {
-                    image.GetComponent<Image>().sprite = newSprites[5];
+                    return;
                 }
+                int secondIndex = 0;
+                foreach (Transform image in column)
+                {   
+                    if (secondIndex >= patternsList[firstIndex].Count)
+                    {
+                        secondIndex = 0;
+                    }
+
+                    image.GetComponent<Image>().sprite = allSprites[patternsList[firstIndex][secondIndex]];
+                    secondIndex++;
+                }
+                firstIndex++;
             }
-        }
-        else
-        {
-            return;
         }
     }
 
     // Create the columns
-    private List<Transform> ColumnsMaker(int elements, int step)
+    private List<Transform> ColumnBuilder(Transform element, int step)
     {
-
-        int counter = 0;
         List<Transform> column = new List<Transform>();
+        int childCount = element.childCount;
         
-        for (int i = 0; i < elements; i++)
+        for (int i = step; i < childCount; i++)
         {
-            column.Add(transform.GetChild(i));
-            counter++;
-            if (counter >= step)
-            {
-                return column;
-            }
+            column.Add(element.GetChild(i));
         }
         return column;
     }
