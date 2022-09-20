@@ -63,3 +63,5 @@ crashlytics-build.properties
 *.csproj
 *TextMesh Pro
 *UserSettings
+*ProjectSettings
+*\Backend\.venv
