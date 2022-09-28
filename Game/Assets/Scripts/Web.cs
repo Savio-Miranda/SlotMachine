@@ -3,18 +3,23 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-// UnityWebRequest.Get example
-
-// Access a website and use UnityWebRequest.Get to download a page.
-// Also try to download a non-existing page. Display the error.
-
 public class Web : MonoBehaviour
 {
-    public static List<List<int>> result = new List<List<int>>();
-    public void GetElements()
+    private List<List<int>> matrix = new List<List<int>>();
+
+    public List<List<int>> GetResults()
     {
-        // A correct website page.
-        StartCoroutine(GetRequest("http://127.0.0.1:5000"));
+        return matrix;
+    }
+
+    public IEnumerator GetElementRoutine()
+    {
+        yield return GetRequest("http://127.0.0.1:5000");
+    }
+
+    public IEnumerator GetMatrixRoutine()
+    {
+        yield return GetRequest("http://127.0.0.1:5000/matrix");
     }
 
     public IEnumerator GetRequest(string uri)
@@ -38,7 +43,8 @@ public class Web : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                    result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<List<int>>>(webRequest.downloadHandler.text);
+                    var receivedList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<List<int>>>(webRequest.downloadHandler.text);
+                    matrix = receivedList;
                     break;
             }
         }

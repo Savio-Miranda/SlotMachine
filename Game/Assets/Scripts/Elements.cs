@@ -18,11 +18,17 @@ public class Elements : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            child.GetComponent<Image>().sprite = allSprites[Random.Range (0, numberOfElements.Length)];
+            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{Random.Range (0, numberOfElements.Length)}");//allSprites[Random.Range (0, numberOfElements.Length)];
         }
     }
     
+    // Pre-established pattern
     public void Pattern()
+    {
+        StartCoroutine(PatternRoutine());
+    }
+
+    IEnumerator PatternRoutine()
     {
         bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
         
@@ -36,29 +42,71 @@ public class Elements : MonoBehaviour
                 counter += 3;
             }
             int firstIndex = 0;
+            
+            yield return request.GetElementRoutine();
+            
             foreach (List<Transform> column in columnsList)
             {
-                if (firstIndex >= Web.result.Count)
+
+                if (firstIndex >= request.GetResults().Count)
                 {
-                    return;
+                    yield break;
                 }
                 int secondIndex = 0;
+                
                 foreach (Transform image in column)
-                {   
-                    if (secondIndex >= Web.result[firstIndex].Count)
+                {
+                    if (secondIndex >= request.GetResults()[firstIndex].Count)
                     {
                         secondIndex = 0;
                     }
 
-                    image.GetComponent<Image>().sprite = allSprites[Web.result[firstIndex][secondIndex]];
+                    image.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{request.GetResults()[firstIndex][secondIndex]}"); //allSprites[request.GetResults()[firstIndex][secondIndex]];
                     secondIndex++;
                 }
                 firstIndex++;
             }
         }
+        yield return null;
     }
 
-    // Create the columns
+    // Receives the matrix pattern from server
+    private void Matrix()
+    {
+        StartCoroutine(MatrixRoutine());
+    }
+    IEnumerator MatrixRoutine()
+    {
+        int firstIndex = 0;
+        int lineIndex = 0;
+        
+        yield return request.GetMatrixRoutine();
+
+        List<List<int>> receivedMatrix = request.GetResults();
+        //print($"receivedMatrix.Count: {receivedMatrix.Count}");
+
+        foreach (Transform child in transform)
+        {
+            // Adds the matrix sprite to the image;
+            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}"); //allSprites[receivedMatrix[lineIndex][firstIndex]];
+
+            // Changes line and resets the Index Line
+            if (lineIndex > receivedMatrix.Count - 1)
+            {
+                lineIndex++;
+            }
+            
+            firstIndex++;
+
+            if (firstIndex > receivedMatrix[lineIndex].Count - 1)
+            {
+                firstIndex = 0;
+            }
+            
+        }
+    }
+
+    // Creates the columns
     private List<Transform> ColumnBuilder(Transform element, int step)
     {
         List<Transform> column = new List<Transform>();
@@ -75,11 +123,12 @@ public class Elements : MonoBehaviour
     {
         enabled = true;
         spriteList.Clear();
-        request.GetElements();
+        request.GetResults();
     }
     public void EnableOff()
     {
-        Invoke ("Pattern", time);
+        Invoke("Matrix", time);
+        Invoke("Pattern", time);
         enabled = false;
     }
 }
