@@ -1,3 +1,4 @@
+# This function allow the game to get a pre-ordened pattern
 def pattern(set_columns: int, set_lines: int):
     index = 0
     list_of_patterns = []

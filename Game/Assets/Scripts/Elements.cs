@@ -8,7 +8,6 @@ public class Elements : MonoBehaviour
 {
     public float time;
     public GameObject PatternButton;
-    public Sprite[] allSprites;
     private List<int> spriteList = new List<int>();
     private List<List<Transform>> columnsList = new List<List<Transform>>();
     private int[] numberOfElements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -18,7 +17,7 @@ public class Elements : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{Random.Range (0, numberOfElements.Length)}");//allSprites[Random.Range (0, numberOfElements.Length)];
+            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{Random.Range (0, numberOfElements.Length)}");
         }
     }
     
@@ -29,43 +28,38 @@ public class Elements : MonoBehaviour
     }
 
     IEnumerator PatternRoutine()
-    {
-        bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
+    {        
+        int counter = 0;
+        // Receiving columns
+        for (int i = 0; i < 5; i++)
+        {
+            columnsList.Add(ColumnBuilder(transform, counter));
+            counter += 3;
+        }
+        int firstIndex = 0;
         
-        if (isPatternActive)
-        {        
-            int counter = 0;
-            // Receiving columns
-            for (int i = 0; i < 5; i++)
-            {
-                columnsList.Add(ColumnBuilder(transform, counter));
-                counter += 3;
-            }
-            int firstIndex = 0;
-            
-            yield return request.GetElementRoutine();
-            
-            foreach (List<Transform> column in columnsList)
-            {
+        yield return request.GetElementRoutine();
+        
+        foreach (List<Transform> column in columnsList)
+        {
 
-                if (firstIndex >= request.GetResults().Count)
-                {
-                    yield break;
-                }
-                int secondIndex = 0;
-                
-                foreach (Transform image in column)
-                {
-                    if (secondIndex >= request.GetResults()[firstIndex].Count)
-                    {
-                        secondIndex = 0;
-                    }
-
-                    image.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{request.GetResults()[firstIndex][secondIndex]}"); //allSprites[request.GetResults()[firstIndex][secondIndex]];
-                    secondIndex++;
-                }
-                firstIndex++;
+            if (firstIndex >= request.GetResults().Count)
+            {
+                yield break;
             }
+            int secondIndex = 0;
+            
+            foreach (Transform image in column)
+            {
+                if (secondIndex >= request.GetResults()[firstIndex].Count)
+                {
+                    secondIndex = 0;
+                }
+
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{request.GetResults()[firstIndex][secondIndex]}"); //allSprites[request.GetResults()[firstIndex][secondIndex]];
+                secondIndex++;
+            }
+            firstIndex++;
         }
         yield return null;
     }
@@ -75,6 +69,7 @@ public class Elements : MonoBehaviour
     {
         StartCoroutine(MatrixRoutine());
     }
+
     IEnumerator MatrixRoutine()
     {
         int firstIndex = 0;
@@ -83,26 +78,20 @@ public class Elements : MonoBehaviour
         yield return request.GetMatrixRoutine();
 
         List<List<int>> receivedMatrix = request.GetResults();
-        //print($"receivedMatrix.Count: {receivedMatrix.Count}");
 
         foreach (Transform child in transform)
         {
-            // Adds the matrix sprite to the image;
-            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}"); //allSprites[receivedMatrix[lineIndex][firstIndex]];
-
             // Changes line and resets the Index Line
-            if (lineIndex > receivedMatrix.Count - 1)
-            {
-                lineIndex++;
-            }
-            
-            firstIndex++;
-
             if (firstIndex > receivedMatrix[lineIndex].Count - 1)
             {
+                lineIndex++;
                 firstIndex = 0;
             }
             
+            // Adds the matrix sprite to the image;
+            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}");
+
+            firstIndex++;
         }
     }
 
@@ -125,10 +114,19 @@ public class Elements : MonoBehaviour
         spriteList.Clear();
         request.GetResults();
     }
+
     public void EnableOff()
     {
-        Invoke("Matrix", time);
-        Invoke("Pattern", time);
+        bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
+        if (isPatternActive)
+        {
+            Invoke("Pattern", time);
+        }
+        else
+        {
+            Invoke("Matrix", time);    
+        }
+    
         enabled = false;
     }
 }
