@@ -1,4 +1,3 @@
-from msilib import sequence
 import numpy as np
 
 
@@ -38,12 +37,6 @@ class Matrix:
             return new_dict
         
         return new_dict
-
-        # # Get the range of those indices as final output
-        # if Match.any() > 0:
-        #     return np.where(np.convolve(Match, np.ones(sequence_size, dtype=int)) > 0)[i]
-        # else:
-        #     return []         # No match found
     
     def create_sequences(self):
         sequences = {}
