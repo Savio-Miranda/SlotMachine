@@ -13,5 +13,8 @@ def index():
 
 @app.route("/matrix")
 def matrix():
-    m = send_matrix.Matrix(5, 3)
-    return m.structure()
+    m = send_matrix.Matrix(5, 3, 11)
+    #matrix = json.dumps(m._structure().tolist())
+    matrix = m._structure().tolist()
+    print("matrix: ", matrix, "matrix type: ", type(matrix))
+    return matrix
