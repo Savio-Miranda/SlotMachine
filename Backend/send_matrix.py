@@ -10,13 +10,15 @@ class Matrix:
         self.sequences = self.create_sequences()
 
     def _structure(self):
-        new_matrix = np.random.randint(0, self.number_of_sprites + 1, 15).reshape(self.h, self.v)
+        new_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.h, self.v)
         return new_matrix
     
     def create_sequences(self):
         sequences = {}
-        for i in range(self.number_of_sprites + 1):
+        for i in range(self.number_of_sprites):
             sequences.update({i: [i, i, i]})
+        
+        print("sequences:", sequences)
 
         return sequences
 
