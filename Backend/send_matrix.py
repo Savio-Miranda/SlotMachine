@@ -6,12 +6,12 @@ class Matrix:
         self.h = horizontal_lines
         self.v = vertical_lines
         self.number_of_sprites = number_of_sprites
-        self.current_matrix = self._structure()
+        self.current_matrix = self.structure()
         self.sequences = self.create_sequences()
 
-    def _structure(self):
+    def structure(self):
         new_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.h, self.v)
-        return new_matrix
+        return new_matrix.tolist()
     
     def create_sequences(self):
         sequences = {}
@@ -47,8 +47,8 @@ class Matrix:
         return wins
 
 
-test = Matrix(3, 5, 11)
-#test_sequence = np.array([2, 2, 2])
-#print("test.rewards(test_sequence): ", test.rewards(test_sequence))
+# test = Matrix(3, 5, 11)
+# #test_sequence = np.array([2, 2, 2])
+# #print("test.rewards(test_sequence): ", test.rewards(test_sequence))
 
-print("test.rewards: ", test.rewards())
+# print("test.rewards: ", test.rewards())

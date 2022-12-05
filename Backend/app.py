@@ -1,9 +1,11 @@
 from flask import Flask
 import send_pattern
-import send_matrix
+from send_matrix import Matrix
 
 
+matrix = Matrix(5, 3, 11)
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
@@ -12,9 +14,12 @@ def index():
 
 
 @app.route("/matrix")
-def matrix():
-    m = send_matrix.Matrix(5, 3, 11)
-    #matrix = json.dumps(m._structure().tolist())
-    matrix = m._structure().tolist()
-    print("matrix: ", matrix, "matrix type: ", type(matrix))
-    return matrix
+def get_matrix():
+    m = matrix.structure()
+    return m
+
+
+@app.route("/rewards")
+def get_rewards():
+    r = matrix.rewards()
+    return r

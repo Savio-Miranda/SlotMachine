@@ -13,7 +13,7 @@ public class Rules : MonoBehaviour
     {
         int lineIndex = 0;
         int firstIndex = 0;
-        receivedMatrix = request.GetResults();
+        receivedMatrix = Web.GetResults();
         foreach (Transform child in transform)
         {
             // Changes line and resets the Index Line

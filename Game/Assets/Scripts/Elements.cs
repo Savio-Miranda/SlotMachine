@@ -1,23 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Networking;
+using UnityEngine.UIElements;
 
 public class Elements : MonoBehaviour
 {
     public float time;
-    public GameObject PatternButton;
-    private List<int> spriteList = new List<int>();
-    private List<List<Transform>> columnsList = new List<List<Transform>>();
+    public UIDocument document;
+    private VisualElement screen;
+    private Button enableButton;
+    private Button disableButton;
+    private Button playButton;
+    private Button stopButton;
+    private List<VisualElement> spriteList = new List<VisualElement>();
+    private List<List<VisualElement>> columnsList = new List<List<VisualElement>>();
     private int[] numberOfElements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    public Web request;
+
+    void Start()
+    {
+        screen = document.rootVisualElement.Q<VisualElement>("screen");
+        enableButton = document.rootVisualElement.Q<Button>("enable-button");
+        disableButton = document.rootVisualElement.Q<Button>("disable-button");
+        playButton = document.rootVisualElement.Q<Button>("play-button");
+        stopButton = document.rootVisualElement.Q<Button>("stop-button");
+        
+        // registered functions
+        playButton.RegisterCallback<ClickEvent>(EnableOff);
+        stopButton.RegisterCallback<ClickEvent>(EnableOn);
+    }
     
     void Update()
     {
-        foreach (Transform child in transform)
+        foreach (VisualElement Image in screen.Children())
         {
-            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{Random.Range (0, numberOfElements.Length)}");
+            Image.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/{Random.Range (0, numberOfElements.Length)}"));
         }
     }
     
@@ -33,30 +49,31 @@ public class Elements : MonoBehaviour
         // Receiving columns
         for (int i = 0; i < 5; i++)
         {
-            columnsList.Add(ColumnBuilder(transform, counter));
+            columnsList.Add(ColumnBuilder(counter));
             counter += 3;
         }
         int firstIndex = 0;
         
-        yield return request.GetElementRoutine();
+        yield return Web.GetElementRoutine();
         
-        foreach (List<Transform> column in columnsList)
+        foreach (List<VisualElement> column in columnsList)
         {
 
-            if (firstIndex >= request.GetResults().Count)
+            if (firstIndex >= Web.GetResults().Count)
             {
                 yield break;
             }
             int secondIndex = 0;
             
-            foreach (Transform image in column)
+            foreach (VisualElement image in column)
             {
-                if (secondIndex >= request.GetResults()[firstIndex].Count)
+                if (secondIndex >= Web.GetResults()[firstIndex].Count)
                 {
                     secondIndex = 0;
                 }
 
-                image.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{request.GetResults()[firstIndex][secondIndex]}"); //allSprites[request.GetResults()[firstIndex][secondIndex]];
+                //image.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{request.GetResults()[firstIndex][secondIndex]}"); //allSprites[request.GetResults()[firstIndex][secondIndex]];
+                image.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/{Web.GetResults()[firstIndex][secondIndex]}"));
                 secondIndex++;
             }
             firstIndex++;
@@ -75,11 +92,11 @@ public class Elements : MonoBehaviour
         int firstIndex = 0;
         int lineIndex = 0;
         
-        yield return request.GetMatrixRoutine();
+        yield return Web.GetMatrixRoutine();
 
-        List<List<int>> receivedMatrix = request.GetResults();
+        List<List<int>> receivedMatrix = Web.GetResults();
 
-        foreach (Transform child in transform)
+        foreach (VisualElement child in screen.Children())
         {
             // Changes line and resets the Index Line
             if (firstIndex > receivedMatrix[lineIndex].Count - 1)
@@ -89,35 +106,57 @@ public class Elements : MonoBehaviour
             }
             
             // Adds the matrix sprite to the image;
-            child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}");
+            //child.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}");
+            child.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/{receivedMatrix[lineIndex][firstIndex]}"));
+
 
             firstIndex++;
         }
     }
 
-    // Creates the columns
-    private List<Transform> ColumnBuilder(Transform element, int step)
+    public void Reward()
     {
-        List<Transform> column = new List<Transform>();
-        int childCount = element.childCount;
+        StartCoroutine(RewardRoutine());
+    }
+
+    IEnumerator RewardRoutine()
+    {   
+        yield return Web.GetRewardRoutine();
+
+        List<List<int>> receivedWins = Web.GetResults();
+
+        // Shows the player the reward of every play
+
+    }
+
+    // Creates the columns
+    private List<VisualElement> ColumnBuilder(int step)
+    {
+        List<VisualElement> column = new List<VisualElement>();
+        int childCount = screen.childCount;
         
         for (int i = step; i < childCount; i++)
         {
-            column.Add(element.GetChild(i));
+            column.Add(screen.ElementAt(i));
         }
         return column;
     }
 
-    public void EnableOn()
+     public void EnableOn(ClickEvent evt)
     {
-        enabled = true;
         spriteList.Clear();
-        request.GetResults();
+        Web.GetResults();
+        
+        disableButton.style.display = DisplayStyle.None;
+        enableButton.style.display = DisplayStyle.Flex;
+        stopButton.style.display = DisplayStyle.None;
+        playButton.style.display = DisplayStyle.Flex;
+        enabled = true;
     }
 
-    public void EnableOff()
+    public void EnableOff(ClickEvent evt)
     {
-        bool isPatternActive = PatternButton.GetComponent<Button>().IsActive();
+        bool isPatternActive = ButtonClicked(enableButton);
         if (isPatternActive)
         {
             Invoke("Pattern", time);
@@ -126,7 +165,21 @@ public class Elements : MonoBehaviour
         {
             Invoke("Matrix", time);    
         }
-    
+        
+        disableButton.style.display = DisplayStyle.None;
+        enableButton.style.display = DisplayStyle.Flex;
+        stopButton.style.display = DisplayStyle.Flex;
+        playButton.style.display = DisplayStyle.None;
         enabled = false;
+    }
+
+    public bool ButtonClicked(Button btn)
+    {
+        bool wasClicked = false;
+        if (btn != null)
+        {
+            btn.clickable.clicked += () => {wasClicked = true;};
+        }
+        return wasClicked;
     }
 }

@@ -5,24 +5,29 @@ using System.Collections.Generic;
 
 public class Web : MonoBehaviour
 {
-    private List<List<int>> matrix = new List<List<int>>();
+    private static List<List<int>> matrix = new List<List<int>>();
 
-    public List<List<int>> GetResults()
+    public static List<List<int>> GetResults()
     {
         return matrix;
     }
 
-    public IEnumerator GetElementRoutine()
+    public static IEnumerator GetElementRoutine()
     {
         yield return GetRequest("http://127.0.0.1:5000");
     }
 
-    public IEnumerator GetMatrixRoutine()
+    public static IEnumerator GetMatrixRoutine()
     {
         yield return GetRequest("http://127.0.0.1:5000/matrix");
     }
 
-    public IEnumerator GetRequest(string uri)
+    public static IEnumerator GetRewardRoutine()
+    {
+        yield return GetRequest("http://127.0.0.1:5000/reward");
+    }
+
+    public static IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -35,6 +40,7 @@ public class Web : MonoBehaviour
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
+                    break;
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(pages[page] + ": Error: " + webRequest.error);
                     break;
