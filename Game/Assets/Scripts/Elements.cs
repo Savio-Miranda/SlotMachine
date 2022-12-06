@@ -12,6 +12,7 @@ public class Elements : MonoBehaviour
     private Button disableButton;
     private Button playButton;
     private Button stopButton;
+    public bool setBool = false;
     private List<VisualElement> spriteList = new List<VisualElement>();
     private List<List<VisualElement>> columnsList = new List<List<VisualElement>>();
     private int[] numberOfElements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -27,6 +28,9 @@ public class Elements : MonoBehaviour
         // registered functions
         playButton.RegisterCallback<ClickEvent>(EnableOff);
         stopButton.RegisterCallback<ClickEvent>(EnableOn);
+
+        //enableButton.RegisterCallback<ClickEvent>(ButtonClicked);
+        //disableButton.RegisterCallback<ClickEvent>(ButtonClicked);
     }
     
     void Update()
@@ -146,18 +150,20 @@ public class Elements : MonoBehaviour
     {
         spriteList.Clear();
         Web.GetResults();
-        
-        disableButton.style.display = DisplayStyle.None;
-        enableButton.style.display = DisplayStyle.Flex;
+
+        // disableButton.style.display = DisplayStyle.None;
+        // enableButton.style.display = DisplayStyle.Flex;
+
         stopButton.style.display = DisplayStyle.None;
         playButton.style.display = DisplayStyle.Flex;
+        
         enabled = true;
     }
 
     public void EnableOff(ClickEvent evt)
     {
-        bool isPatternActive = ButtonClicked(enableButton);
-        if (isPatternActive)
+        ButtonClicked(disableButton, enableButton);
+        if (setBool)
         {
             Invoke("Pattern", time);
         }
@@ -166,20 +172,34 @@ public class Elements : MonoBehaviour
             Invoke("Matrix", time);    
         }
         
-        disableButton.style.display = DisplayStyle.None;
-        enableButton.style.display = DisplayStyle.Flex;
+        // disableButton.style.display = DisplayStyle.None;
+        // enableButton.style.display = DisplayStyle.Flex;
+
         stopButton.style.display = DisplayStyle.Flex;
         playButton.style.display = DisplayStyle.None;
+        
         enabled = false;
     }
 
-    public bool ButtonClicked(Button btn)
+    public void ButtonClicked(Button disable, Button enable)
     {
-        bool wasClicked = false;
-        if (btn != null)
+        if (disable != null)
         {
-            btn.clickable.clicked += () => {wasClicked = true;};
+            disable.clickable.clicked += () => {
+                disable.style.display = DisplayStyle.None;
+                enable.style.display = DisplayStyle.Flex;
+                setBool = true;
+            };
         }
-        return wasClicked;
+
+        if(enable != null)
+        {
+            enable.clickable.clicked += () => {
+                disable.style.display = DisplayStyle.Flex;
+                enable.style.display = DisplayStyle.None;
+                setBool = false;
+            };
+        }
     }
+
 }
