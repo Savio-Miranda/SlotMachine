@@ -12,12 +12,12 @@ public class Web : MonoBehaviour
         return matrix;
     }
 
-    public static IEnumerator GetElementRoutine()
+    public static IEnumerator GetOrdenedMatrixRoutine()
     {
         yield return GetRequest("http://127.0.0.1:5000");
     }
 
-    public static IEnumerator GetMatrixRoutine()
+    public static IEnumerator GetRandomMatrixRoutine()
     {
         yield return GetRequest("http://127.0.0.1:5000/matrix");
     }

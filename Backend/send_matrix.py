@@ -17,8 +17,6 @@ class Matrix:
         sequences = {}
         for i in range(self.number_of_sprites):
             sequences.update({i: [i, i, i]})
-        
-        print("sequences:", sequences)
 
         return sequences
 

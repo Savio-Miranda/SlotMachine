@@ -181,12 +181,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 33124174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fc9a7e947e4c74fa0556ace72955a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 998d9b3ce13527b4e8bffe610bb160a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0
   document: {fileID: 33124175}
-  request: {fileID: 0}
+  setBool: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
