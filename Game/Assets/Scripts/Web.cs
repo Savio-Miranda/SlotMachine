@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class Web : MonoBehaviour
 {
+    private const string URL = "https://server-slot-machine.saviomiranda.repl.co/";
     private static List<List<int>> matrix = new List<List<int>>();
 
     public static List<List<int>> GetResults()
@@ -14,17 +15,17 @@ public class Web : MonoBehaviour
 
     public static IEnumerator GetOrdenedMatrixRoutine()
     {
-        yield return GetRequest("http://127.0.0.1:5000");
+        yield return GetRequest(URL);
     }
 
     public static IEnumerator GetRandomMatrixRoutine()
     {
-        yield return GetRequest("http://127.0.0.1:5000/matrix");
+        yield return GetRequest($"{URL}/matrix");
     }
 
     public static IEnumerator GetRewardRoutine()
     {
-        yield return GetRequest("http://127.0.0.1:5000/reward");
+        yield return GetRequest($"{URL}/reward");
     }
 
     public static IEnumerator GetRequest(string uri)
