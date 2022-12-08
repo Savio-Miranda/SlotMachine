@@ -5,27 +5,36 @@ using System.Collections.Generic;
 
 public class Web : MonoBehaviour
 {
-    private const string URL = "https://server-slot-machine.saviomiranda.repl.co/";
+    //private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
+    private const string URL = "http://127.0.0.1:5000";
+
     private static List<List<int>> matrix = new List<List<int>>();
+
+    public static Dictionary<int, List<int>> win = new Dictionary<int, List<int>>();
 
     public static List<List<int>> GetResults()
     {
         return matrix;
     }
 
+    public static Dictionary<int, List<int>> GetRewards()
+    {
+        return win;
+    }
+
     public static IEnumerator GetOrdenedMatrixRoutine()
     {
-        yield return GetRequest(URL);
+        yield return GetRequest($"{URL}/ordened");
     }
 
     public static IEnumerator GetRandomMatrixRoutine()
     {
-        yield return GetRequest($"{URL}/matrix");
+        yield return GetRequest($"{URL}/random");
     }
 
     public static IEnumerator GetRewardRoutine()
     {
-        yield return GetRequest($"{URL}/reward");
+        yield return GetRequest($"{URL}/rewards");
     }
 
     public static IEnumerator GetRequest(string uri)
@@ -50,10 +59,18 @@ public class Web : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                    var receivedList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<List<int>>>(webRequest.downloadHandler.text);
-                    matrix = receivedList;
+                    
+                    if (uri == $"{URL}/rewards")
+                    {
+                        win = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(webRequest.downloadHandler.text);
+                    }
+                    else
+                    {
+                        matrix = Newtonsoft.Json.JsonConvert.DeserializeObject<List<List<int>>>(webRequest.downloadHandler.text);
+                    }
+
                     break;
             }
         }
-    }
+    }    
 }

@@ -1,25 +1,33 @@
 from flask import Flask
-import send_pattern
 from send_matrix import Matrix
+import json
 
-
-matrix = Matrix(5, 3, 11)
+matrix = Matrix(3, 5, 11)
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
-    p = send_pattern.pattern(5, 3)
-    return p
+@app.route("/ordened")
+def get_ordened():
+  ordened_matrix = matrix.ordened_structure()
+  return json.dumps(ordened_matrix)
 
 
-@app.route("/matrix")
-def get_matrix():
-    m = matrix.structure()
-    return m
+@app.route("/random")
+def get_random():
+  random_matrix = matrix.random_structure().tolist()
+  return json.dumps(random_matrix)
 
 
 @app.route("/rewards")
 def get_rewards():
-    r = matrix.rewards()
-    return r
+  rewards = matrix.rewards()
+  return json.dumps(rewards)
+
+
+@app.route("/")
+def get_ready():
+  return "ready"
+
+
+# if __name__ == "__main__":
+#   app.run(host="0.0.0.0")

@@ -9,6 +9,7 @@ public class ScreenSlotManager : MonoBehaviour
     public float time;
     public UIDocument document;
     private VisualElement screen;
+    private Label rewards;
     private Button enableButton;
     private Button disableButton;
     private Button playButton;
@@ -23,6 +24,7 @@ public class ScreenSlotManager : MonoBehaviour
         sprites = Resources.LoadAll<Sprite>("Sprites");
 
         screen = document.rootVisualElement.Q<VisualElement>("screen");
+        rewards = document.rootVisualElement.Q<Label>("reward");
         enableButton = document.rootVisualElement.Q<Button>("enable-button");
         disableButton = document.rootVisualElement.Q<Button>("disable-button");
         playButton = document.rootVisualElement.Q<Button>("play-button");
@@ -91,14 +93,32 @@ public class ScreenSlotManager : MonoBehaviour
         }
     }
 
+    // Shows the player the reward of every play
     IEnumerator RewardRoutine()
     {   
+        int points = 0;
+        
         yield return Web.GetRewardRoutine();
-
-        List<List<int>> receivedWins = Web.GetResults();
-
-        // Shows the player the reward of every play
-
+        Dictionary<int, List<int>> wins = Web.GetRewards();
+        
+        if (wins.Count == 0)
+        {
+            points += 0;
+        }
+        else
+        {
+            for (int i = 0; i < wins.Count; i++)
+            {
+                points += wins[i].Count;
+                // for (int j = 0; j < wins[i].Count; j++)
+                // {
+                //     points ++;
+                // }
+            }
+        }
+        
+        
+        rewards.text = $"Points: {points.ToString()}";
     }
 
     // Creates the columns
@@ -158,7 +178,8 @@ public class ScreenSlotManager : MonoBehaviour
         }
         else
         {
-            Invoke("RandomMatrix", time);    
+            Invoke("RandomMatrix", time);  
+            Invoke("Rewards", time);
         }
 
         stopButton.style.display = DisplayStyle.Flex;
