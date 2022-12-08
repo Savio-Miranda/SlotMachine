@@ -14,8 +14,8 @@ def get_ordened():
 
 @app.route("/random")
 def get_random():
-  random_matrix = matrix.random_structure().tolist()
-  return json.dumps(random_matrix)
+  matrix.random_structure()
+  return json.dumps(matrix.current_random_matrix.tolist())
 
 
 @app.route("/rewards")
@@ -29,5 +29,5 @@ def get_ready():
   return "ready"
 
 
-# if __name__ == "__main__":
-#   app.run(host="0.0.0.0")
+if __name__ == "__main__":
+  app.run(host="0.0.0.0")

@@ -5,19 +5,18 @@ using System.Collections.Generic;
 
 public class Web : MonoBehaviour
 {
-    //private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
-    private const string URL = "http://127.0.0.1:5000";
+    private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
 
     private static List<List<int>> matrix = new List<List<int>>();
 
-    public static Dictionary<int, List<int>> win = new Dictionary<int, List<int>>();
+    public static List<Dictionary<int, List<int>>> win = new List<Dictionary<int, List<int>>>();
 
     public static List<List<int>> GetResults()
     {
         return matrix;
     }
 
-    public static Dictionary<int, List<int>> GetRewards()
+    public static List<Dictionary<int, List<int>>> GetRewards()
     {
         return win;
     }
@@ -62,7 +61,7 @@ public class Web : MonoBehaviour
                     
                     if (uri == $"{URL}/rewards")
                     {
-                        win = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(webRequest.downloadHandler.text);
+                        win = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Dictionary<int, List<int>>>>(webRequest.downloadHandler.text);
                     }
                     else
                     {
@@ -70,6 +69,7 @@ public class Web : MonoBehaviour
                     }
 
                     break;
+                    
             }
         }
     }    

@@ -14,7 +14,6 @@ class Matrix:
     def random_structure(self):
         random_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.columns, self.lines)
         self.current_random_matrix = random_matrix
-        print("passou aqui")
         return random_matrix
 
 
@@ -45,19 +44,19 @@ class Matrix:
 
     def rewards(self):
         matrix = self.current_random_matrix
-        print(f"current matrix: {matrix}")
+        modified_matrix = np.reshape(matrix.ravel(order='F'), (3, 5), order='C')
         
-        #matrix = np.array([[1, 2, 3], [1, 2, 3], [1, 2, 3], [1, 2, 3], [1, 2, 3]]) TEST MATRIX
-        matrix = np.reshape(matrix.ravel(order='F'), (3, 5), order='C')
-        print(f"reshaped matrix:\n {matrix}")
-        matrix_size = len(matrix)
-        wins = {}
-        
-        
+        i = 0
+        a = [matrix, modified_matrix]
+        all_wins = []
+        for i in range(len(a)):
+            all_wins.append(self.rewards_match(a[i]))
+            i += 1
+        return all_wins
 
-        #a = np.array([[1,2,3], [4,5,6]])
-        #np.reshape(a, 6)
-        
+    def rewards_match(self, matrix):
+        wins = {}
+        matrix_size = len(matrix)
 
         for sequence in self.sequences:
             for i in range(matrix_size):
@@ -74,8 +73,4 @@ class Matrix:
                 if Match.any():
                     wins.update({i:np.where(np.convolve(Match, np.ones(sequence_size, dtype=int)) > 0)[0].tolist()})
         
-        if(len(wins) > 0):
-            print("WINS:", wins)
-        
         return wins
-

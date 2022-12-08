@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -99,8 +100,8 @@ public class ScreenSlotManager : MonoBehaviour
         int points = 0;
         
         yield return Web.GetRewardRoutine();
-        Dictionary<int, List<int>> wins = Web.GetRewards();
-        
+        List<Dictionary<int, List<int>>> wins = Web.GetRewards();
+    
         if (wins.Count == 0)
         {
             points += 0;
@@ -109,14 +110,13 @@ public class ScreenSlotManager : MonoBehaviour
         {
             for (int i = 0; i < wins.Count; i++)
             {
-                points += wins[i].Count;
-                // for (int j = 0; j < wins[i].Count; j++)
-                // {
-                //     points ++;
-                // }
+                for (int j = 0; j < wins[i].Count; j++)
+                {
+                    points += wins[i].ElementAt(j).Value.Count;
+                }
             }
+
         }
-        
         
         rewards.text = $"Points: {points.ToString()}";
     }
@@ -179,7 +179,7 @@ public class ScreenSlotManager : MonoBehaviour
         else
         {
             Invoke("RandomMatrix", time);  
-            Invoke("Rewards", time);
+            Invoke("Rewards",  time + 1);
         }
 
         stopButton.style.display = DisplayStyle.Flex;
