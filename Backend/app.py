@@ -8,14 +8,14 @@ app = Flask(__name__)
 
 @app.route("/ordened")
 def get_ordened():
-  ordened_matrix = matrix.ordened_structure()
-  return json.dumps(ordened_matrix)
+  matrix.ordened_structure()
+  return json.dumps(matrix.current_matrix.tolist())
 
 
 @app.route("/random")
 def get_random():
   matrix.random_structure()
-  return json.dumps(matrix.current_random_matrix.tolist())
+  return json.dumps(matrix.current_matrix.tolist())
 
 
 @app.route("/rewards")

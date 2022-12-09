@@ -2,19 +2,17 @@ import numpy as np
 
 
 class Matrix:
-    def __init__(self, lines: int, colums: int, number_of_sprites: int, current_random_matrix = np.zeros_like((5, 3))):
+    def __init__(self, lines: int, colums: int, number_of_sprites: int, current_matrix = np.zeros_like((5, 3))):
         self.lines = lines
         self.columns = colums
         self.number_of_sprites = number_of_sprites
-        self.current_random_matrix = current_random_matrix
-        self.current_ordened_matrix = self.ordened_structure()
+        self.current_matrix = current_matrix
         self.sequences = self.create_sequences()
 
 
     def random_structure(self):
         random_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.columns, self.lines)
-        self.current_random_matrix = random_matrix
-        return random_matrix
+        self.current_matrix = random_matrix
 
 
     # This method allow the game to get a pre-ordened pattern
@@ -31,7 +29,8 @@ class Matrix:
 
             ordened_matrix.append(suport_list)
 
-        return ordened_matrix
+        ordened_matrix = np.array(ordened_matrix)
+        self.current_matrix = ordened_matrix
 
 
     def create_sequences(self):
@@ -43,7 +42,7 @@ class Matrix:
 
 
     def rewards(self):
-        matrix = self.current_random_matrix
+        matrix = self.current_matrix
         modified_matrix = np.reshape(matrix.ravel(order='F'), (3, 5), order='C')
         
         i = 0

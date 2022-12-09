@@ -178,9 +178,10 @@ public class ScreenSlotManager : MonoBehaviour
         }
         else
         {
-            Invoke("RandomMatrix", time);  
-            Invoke("Rewards",  time + 1);
+            Invoke("RandomMatrix", time);
         }
+        
+        Invoke("Rewards", time + 0.5f);
 
         stopButton.style.display = DisplayStyle.Flex;
         playButton.style.display = DisplayStyle.None;
