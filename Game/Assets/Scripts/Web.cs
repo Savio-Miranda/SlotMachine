@@ -2,29 +2,35 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class Web : MonoBehaviour
 {
-    private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
-    //private const string URL = "http://127.0.0.1:5000";
+    //private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
+    private const string URL = "http://127.0.0.1:5000";
 
+    private static List<string> betList = new List<string>();
     private static List<List<int>> matrix = new List<List<int>>();
+    private static int roundPoints;
 
-    public static List<Dictionary<int, List<int>>> win = new List<Dictionary<int, List<int>>>();
+    public static List<string> GetBetList()
+    {
+        return betList;
+    }
 
     public static List<List<int>> GetResults()
     {
         return matrix;
     }
 
-    public static List<Dictionary<int, List<int>>> GetRewards()
+    public static int GetRewards()
     {
-        return win;
+        return roundPoints;
     }
 
-    public static IEnumerator GetOrdenedMatrixRoutine()
+    public static IEnumerator GetOrderedMatrixRoutine()
     {
-        yield return GetRequest($"{URL}/ordened");
+        yield return GetRequest($"{URL}/ordered");
     }
 
     public static IEnumerator GetRandomMatrixRoutine()
@@ -35,6 +41,11 @@ public class Web : MonoBehaviour
     public static IEnumerator GetRewardRoutine()
     {
         yield return GetRequest($"{URL}/rewards");
+    }
+
+    public static IEnumerator GetBetRoutine()
+    {
+        yield return GetRequest($"{URL}/betlist");
     }
 
     public static IEnumerator GetRequest(string uri)
@@ -59,19 +70,21 @@ public class Web : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                    var jsonObject = webRequest.downloadHandler.text;
+
+                    if (uri == $"{URL}/betlist")
+                        betList = JsonConvert.DeserializeObject<List<string>>(jsonObject);
                     
-                    if (uri == $"{URL}/rewards")
-                    {
-                        win = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Dictionary<int, List<int>>>>(webRequest.downloadHandler.text);
-                    }
+                    else if (uri == $"{URL}/rewards" || uri == $"{URL}/menu")
+                        roundPoints = JsonConvert.DeserializeObject<int>(jsonObject);  
+                    
                     else
                     {
-                        matrix = Newtonsoft.Json.JsonConvert.DeserializeObject<List<List<int>>>(webRequest.downloadHandler.text);
+                        matrix = JsonConvert.DeserializeObject<List<List<int>>>(jsonObject);
                     }
 
-                    break;
-                    
-            }
+                    break;                  
+            }   
         }
-    }    
+    }
 }

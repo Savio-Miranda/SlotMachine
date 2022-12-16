@@ -6,9 +6,14 @@ matrix = Matrix(3, 5, 11)
 app = Flask(__name__)
 
 
-@app.route("/ordened")
-def get_ordened():
-  matrix.ordened_structure()
+@app.route("/betlist")
+def get_betlist():
+  return json.dumps(matrix.bet_list)
+
+
+@app.route("/ordered")
+def get_ordered():
+  matrix.ordered_structure()
   return json.dumps(matrix.current_matrix.tolist())
 
 
@@ -20,8 +25,18 @@ def get_random():
 
 @app.route("/rewards")
 def get_rewards():
-  rewards = matrix.rewards()
-  return json.dumps(rewards)
+  round_points = matrix.round_points
+  matrix.round_points = 0
+  return json.dumps(round_points)
+
+
+@app.route("/menu")
+def get_menu():
+  matrix.round_points = 0
+  return json.dumps(matrix.round_points)
+
+
+
 
 
 @app.route("/")

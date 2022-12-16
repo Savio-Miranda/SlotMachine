@@ -1,0 +1,154 @@
+.column {
+    width: 20%;
+    height: 90%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.image {
+    width: 90%;
+    height: 30%;
+    background-color: rgb(173, 173, 173);
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    -unity-background-scale-mode: scale-to-fit;
+    border-top-left-radius: 10%;
+    border-bottom-left-radius: 10%;
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
+    color: rgb(255, 255, 255);
+}
+
+.button {
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    width: 40%;
+    height: 35%;
+    justify-content: center;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(255, 255, 255);
+    font-size: 250%;
+}
+
+.play-button {
+    background-color: rgb(220, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+.play-button:hover {
+    background-color: rgb(255, 0, 0);
+    border-left-color: rgb(255, 50, 50);
+    border-right-color: rgb(255, 50, 50);
+    border-top-color: rgb(255, 50, 50);
+    border-bottom-color: rgb(255, 50, 50);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    transition-timing-function: ease-in;
+    transition-delay: 10ms;
+    color: rgb(255, 255, 255);
+}
+
+.play-button:active {
+    background-color: rgb(180, 0, 0);
+    color: rgb(255, 255, 255);
+    transition-duration: 50ms;
+}
+
+.play-button-activated {
+    background-color: rgb(0, 220, 0);
+    color: rgb(255, 255, 255);
+}
+
+.play-button-activated:hover {
+    background-color: rgb(0, 255, 0);
+    border-left-color: rgb(50, 255, 50);
+    border-right-color: rgb(50, 255, 50);
+    border-top-color: rgb(50, 255, 50);
+    border-bottom-color: rgb(50, 255, 50);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    transition-timing-function: ease-in;
+    transition-delay: 10ms;
+    color: rgb(255, 255, 255);
+}
+
+.play-button-activated:active {
+    background-color: rgb(0, 180, 0);
+    color: rgb(255, 255, 255);
+    transition-duration: 50ms;
+}
+
+.pattern-button {
+    background-color: rgb(220, 100, 0);
+    color: rgb(255, 255, 255);
+}
+
+.pattern-button:hover {
+    background-color: rgb(255, 100, 0);
+    border-left-color: rgb(255, 130, 0);
+    border-right-color: rgb(255, 130, 0);
+    border-top-color: rgb(255, 130, 0);
+    border-bottom-color: rgb(255, 130, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    transition-timing-function: ease-in;
+    transition-delay: 10ms;
+    color: rgb(255, 255, 255);
+}
+
+.pattern-button:active {
+    background-color: rgb(255, 70, 0);
+    color: rgb(255, 255, 255);
+    transition-duration: 50ms;
+}
+
+.pattern-button-activated {
+    background-color: rgb(220, 220, 0);
+    color: rgb(255, 255, 255);
+}
+
+.pattern-button-activated:hover {
+    background-color: rgb(255, 255, 0);
+    border-left-color: rgb(255, 255, 100);
+    border-right-color: rgb(255, 255, 100);
+    border-top-color: rgb(255, 255, 100);
+    border-bottom-color: rgb(255, 255, 100);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    transition-timing-function: ease-in;
+    transition-delay: 10ms;
+    color: rgb(255, 255, 255);
+}
+
+.pattern-button-activated:active {
+    background-color: rgb(180, 180, 0);
+    color: rgb(255, 255, 255);
+    transition-duration: 50ms;
+}
+
+.menu-button {
+    background-color: rgb(220, 0, 0);
+    color: rgb(255, 255, 255);
+}

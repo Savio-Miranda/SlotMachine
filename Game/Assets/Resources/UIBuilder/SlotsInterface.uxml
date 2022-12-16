@@ -1,0 +1,50 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UIBuilder/SlotInterface.uss?fileID=7433441132597879392&amp;guid=62cd88e29033fc745815eda193c23097&amp;type=3#Uss" />
+    <ui:VisualElement name="base" style="height: 100%; width: 100%; justify-content: space-between; background-color: rgb(79, 79, 79);">
+        <ui:VisualElement name="top" style="left: auto; width: 100%; height: 10%; align-items: center; justify-content: space-around; -unity-text-align: middle-left; overflow: hidden; flex-direction: row;">
+            <ui:Button text="Enable" display-tooltip-when-elided="true" name="pattern-button" class="button pattern-button" style="display: flex; height: 50%;" />
+            <ui:DropdownField name="bet" style="width: 40%; overflow: hidden; visibility: visible; white-space: normal; text-overflow: clip; -unity-text-align: middle-center; height: 50%; -unity-font-style: bold; font-size: 50%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="points-area" style="width: 100%; height: 10%; align-items: center; justify-content: center; flex-direction: row; margin-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0;">
+            <ui:Label text="Points:" display-tooltip-when-elided="true" name="points-label" style="width: 20%; height: 100%; font-size: 40%; -unity-text-align: middle-center; display: flex; color: rgb(255, 255, 255); -unity-font-style: bold;" />
+            <ui:IntegerField value="0" name="points" style="width: 15%; height: 100%; justify-content: space-around; align-items: center; align-self: stretch; font-size: 50%; -unity-text-align: middle-center; text-overflow: clip; color: rgb(0, 0, 0); -unity-font-style: bold; flex-direction: row; margin-top: 4px; margin-bottom: 4px; white-space: normal; -unity-background-scale-mode: scale-to-fit;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="screen" style="width: 100%; height: 55%; justify-content: space-between; flex-direction: row; flex-wrap: wrap;">
+            <ui:VisualElement name="column" class="column">
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+            </ui:VisualElement>
+            <ui:VisualElement name="column" class="column">
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+            </ui:VisualElement>
+            <ui:VisualElement name="column" class="column">
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+            </ui:VisualElement>
+            <ui:VisualElement name="column" class="column">
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+            </ui:VisualElement>
+            <ui:VisualElement name="column" class="column">
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+                <ui:VisualElement name="image" class="image" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="bottom" style="width: 100%; height: 15%; align-items: center; justify-content: space-between; overflow: hidden; -unity-text-align: middle-left; flex-direction: row; flex-wrap: wrap; align-self: center; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%;">
+            <ui:Button text="Stop" display-tooltip-when-elided="true" name="play-button" class="button play-button" style="height: 50%; width: 40%; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;" />
+            <ui:VisualElement name="credits-area" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 40%; height: 50%; align-self: auto; flex-direction: row; justify-content: center; align-items: center;">
+                <ui:Label text="Credits:" display-tooltip-when-elided="true" name="credits-label" style="width: 40%; height: 100%; font-size: 30%; -unity-text-align: middle-center; display: flex; color: rgb(255, 255, 255); -unity-font-style: bold;" />
+                <ui:IntegerField value="500" is-delayed="false" readonly="false" name="credits" style="width: 30%; height: 100%; font-size: 60%; -unity-text-align: middle-center; text-overflow: ellipsis; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="foot" style="width: 100%; height: 10%; align-items: center; justify-content: space-around; overflow: hidden; -unity-text-align: middle-left; flex-direction: row;">
+            <ui:Button text="Menu" display-tooltip-when-elided="true" name="back-button" class="button menu-button" style="background-color: rgb(0, 0, 0); -unity-font-style: bold; height: 70%; width: 30%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
