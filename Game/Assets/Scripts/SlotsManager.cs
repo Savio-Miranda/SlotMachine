@@ -24,27 +24,24 @@ public class SlotsManager : MonoBehaviour
     //_______________________________________________________________________ UNITY PATTERN AREA
     void Start()
     {
+        sprites = Resources.LoadAll<Sprite>("Sprites");
+        bet = document.rootVisualElement.Q<DropdownField>("bet");
+        BetList();
+
         // Screen objects
         screen = document.rootVisualElement.Q<VisualElement>("screen");
         points = document.rootVisualElement.Q<IntegerField>("points");
         credits = document.rootVisualElement.Q<IntegerField>("credits");
 
-        sprites = Resources.LoadAll<Sprite>("Sprites");
-        bet = document.rootVisualElement.Q<DropdownField>("bet");
-        BetList();
-        
         // Start buttons
         backMenuButton = document.rootVisualElement.Q<Button>("back-button");
         playButton = document.rootVisualElement.Q<Button>("play-button");
         patternButton = document.rootVisualElement.Q<Button>("pattern-button");
-        bet.RegisterValueChangedCallback(evt => Debug.Log(evt.newValue));
-        
         
         // registered callbacks
         playButton.RegisterCallback<ClickEvent>(Enable);
         patternButton.RegisterCallback<ClickEvent>(Pattern);
         backMenuButton.RegisterCallback<ClickEvent>(Menu);
-        bet.RegisterValueChangedCallback(evt => Debug.Log(evt.newValue));
     }
     //_______________________________________________________________________ UNITY PATTERN AREA
 
@@ -107,7 +104,7 @@ public class SlotsManager : MonoBehaviour
 
             foreach (VisualElement image in column.Children())
             {   
-                image.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>($"Sprites/{matrix[columnIndex][imageIndex]}"));
+                image.style.backgroundImage = new StyleBackground(sprites[matrix[columnIndex][imageIndex]]);//new StyleBackground(Resources.Load<Sprite>($"Sprites/Icons/{matrix[columnIndex][imageIndex]}"));
                 imageIndex ++; // Changing image inside column
             }
 

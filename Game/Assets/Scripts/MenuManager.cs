@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
     private Button beginMenuButton;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Start button
         beginMenuButton = document.rootVisualElement.Q<Button>("begin-button");
