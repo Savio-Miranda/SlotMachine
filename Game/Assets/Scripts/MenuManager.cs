@@ -1,10 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MenuManager : MonoBehaviour
 {
     public UIDocument document;
-    public GameObject slots;
     private Button beginMenuButton;
 
     // Start is called before the first frame update
@@ -19,7 +19,6 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Slots(ClickEvent evt)
     {
-        slots.SetActive(true);
-        gameObject.SetActive(false);
+        SceneManager.LoadScene("SlotsScene");
     }
 }

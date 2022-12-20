@@ -1,14 +1,13 @@
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class SlotsManager : MonoBehaviour
 {
     public UIDocument document;
-    public GameObject menu;
     public Sprite[] sprites;
     private VisualElement screen;
     private IntegerField points;
@@ -159,9 +158,7 @@ public class SlotsManager : MonoBehaviour
 
     public void Menu(ClickEvent evt)
     {
-        credits.value = 0;
-        menu.SetActive(true);
-        gameObject.SetActive(false);
+        SceneManager.LoadScene("MenuScene");
     }
     //_______________________________________________________________________ EVENT AREA
 
