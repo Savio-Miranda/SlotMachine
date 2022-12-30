@@ -9,10 +9,11 @@ public class SlotsManager : MonoBehaviour
 {
     public UIDocument document;
     public Sprite[] sprites;
+    private CoroutineStarter coroutineStarter;
     private VisualElement screen;
-    private IntegerField points;
+    private IntegerField scores;
     private IntegerField credits;
-    private DropdownField bet;
+    private DropdownField betField;
     private Button backMenuButton;
     private Button playButton;
     private Button patternButton;
@@ -23,13 +24,15 @@ public class SlotsManager : MonoBehaviour
     //_______________________________________________________________________ UNITY PATTERN AREA
     void Start()
     {
+        coroutineStarter = FindObjectOfType<CoroutineStarter>();
         sprites = Resources.LoadAll<Sprite>("Sprites");
-        bet = document.rootVisualElement.Q<DropdownField>("bet");
-        BetList();
+        betField = document.rootVisualElement.Q<DropdownField>("bet");
+        SetBetList();
+        SetSlotData();
 
         // Screen objects
         screen = document.rootVisualElement.Q<VisualElement>("screen");
-        points = document.rootVisualElement.Q<IntegerField>("points");
+        scores = document.rootVisualElement.Q<IntegerField>("points");
         credits = document.rootVisualElement.Q<IntegerField>("credits");
 
         // Start buttons
@@ -41,6 +44,8 @@ public class SlotsManager : MonoBehaviour
         playButton.RegisterCallback<ClickEvent>(Enable);
         patternButton.RegisterCallback<ClickEvent>(Pattern);
         backMenuButton.RegisterCallback<ClickEvent>(Menu);
+
+        GameOver.OnReturningToMenu += TestGameOver;
     }
     //_______________________________________________________________________ UNITY PATTERN AREA
 
@@ -56,38 +61,56 @@ public class SlotsManager : MonoBehaviour
     }
     //_______________________________________________________________________ UNITY PATTERN AREA
 
-    public void BetList()
+    public void SetBetList()
     {
-        StartCoroutine(BetListRoutine());
+        coroutineStarter.StartCoroutine(BetListRoutine());
     }
 
     IEnumerator BetListRoutine()
     {
         yield return Web.GetBetRoutine();
-        bet.choices = Web.GetBetList();
-        bet.value = bet.choices[0];
+        betField.choices = Web.GetBetList();
+        betField.value = betField.choices[0];
+    }
+
+    public void SendCurrentBet(string bet)
+    {
+        coroutineStarter.StartCoroutine(Web.PutBetRoutine(bet));
     }
     //_______________________________________________________________________ ROUTINE AREA
 
+    private void TestGameOver()
+    {
+        coroutineStarter.StartCoroutine(DataRoutine(Web.GetMenuRoutine()));
+    }
+    private void SetSlotData()
+    {
+        coroutineStarter.StartCoroutine(DataRoutine(Web.GetStartMatrixRoutine()));
+    }
+
     private void RandomMatrix()
     {
-        StartCoroutine(MatrixRoutines(Web.GetRandomMatrixRoutine()));
+        coroutineStarter.StartCoroutine(DataRoutine(Web.GetRandomMatrixRoutine()));
     }
 
     public void OrderedMatrix()
     {
-        StartCoroutine(MatrixRoutines(Web.GetOrderedMatrixRoutine()));
+        coroutineStarter.StartCoroutine(DataRoutine(Web.GetOrderedMatrixRoutine()));
     }
 
-    IEnumerator MatrixRoutines(IEnumerator routine)
+    IEnumerator DataRoutine(IEnumerator routine)
     {        
         List<List<int>> matrix = null;
         yield return routine;
-        matrix = Web.GetResults();
+        
+        if (Web.data.credits <= 5) { SceneManager.LoadScene("GameOverScene"); }
+        credits.value = Web.data.credits;
+        scores.value = Web.data.scores;
+        matrix = Web.data.matrix;
 
         // Making a list of columns with dinamic amount of images in every column.
         // Futurely, if you want to change the number of images per column, you won't have to worry
-        // about updating values throut the code.
+        // about updating values throughout the code.
         int matrixColumns = matrix.Count;
         columnsList.Add(ColumnBuilder(matrix[matrixColumns - 1].Count));
 
@@ -127,20 +150,6 @@ public class SlotsManager : MonoBehaviour
     }
     //_______________________________________________________________________ ROUTINE AREA
 
-    public void Rewards()
-    {
-        StartCoroutine(RewardRoutine());
-    }
-
-    IEnumerator RewardRoutine()
-    {
-        yield return Web.GetRewardRoutine();
-        int roundPoints = Web.GetRewards();
-        points.value = roundPoints;
-        credits.value += roundPoints;
-    }
-    //_______________________________________________________________________ ROUTINE AREA
-
     public void Pattern(ClickEvent evt)
     {
         if (patternBool)
@@ -158,25 +167,28 @@ public class SlotsManager : MonoBehaviour
 
     public void Menu(ClickEvent evt)
     {
-        SceneManager.LoadScene("MenuScene");
+        coroutineStarter.StartCoroutine(Web.GetMenuRoutine());
+        if (Web.menu)
+        {
+            SceneManager.LoadScene("MenuScene");
+        }
+
     }
     //_______________________________________________________________________ EVENT AREA
 
     public void Enable(ClickEvent evt)
     {
-
         if (enabled)
         {
-            int currentBet = int.Parse(bet.value);
-            credits.value -= currentBet;
+            SendCurrentBet(betField.value);
             
             if (patternBool)
-                OrderedMatrix();
+                Invoke("OrderedMatrix", 2f);
             else
             {
-                RandomMatrix();
+                Invoke("RandomMatrix", 2f);
             }
-            Invoke("Rewards", 1f);
+
             spriteList.Clear();
             StyleSheetModifier(playButton, "Play", "play-button", "play-button-activated");
             enabled = false;

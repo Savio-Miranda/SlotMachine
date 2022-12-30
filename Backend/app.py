@@ -1,42 +1,49 @@
-from flask import Flask
-from send_matrix import Matrix
+from flask import Flask, request
+from slot_machine import SlotMachine
 import json
 
-matrix = Matrix(3, 5, 11)
+
+machine = SlotMachine(3, 5, 11)
+
+
 app = Flask(__name__)
+
+
+@app.route("/bet", methods=["POST"])
+def post_bet():
+  # if request.method == "POST":
+  tudo_isso_pra_chegar_num_numero = int(list(request.form.keys())[0])
+  machine.bet = tudo_isso_pra_chegar_num_numero
+  machine.credits -= machine.bet
+  return "201"
 
 
 @app.route("/betlist")
 def get_betlist():
-  return json.dumps(matrix.bet_list)
+  return json.dumps(machine.bet_list)
 
+
+@app.route("/start")
+def get_start():
+  machine.start_structure()
+  return machine.Json_Repr()
 
 @app.route("/ordered")
 def get_ordered():
-  matrix.ordered_structure()
-  return json.dumps(matrix.current_matrix.tolist())
+  machine.ordered_structure()
+  return machine.Json_Repr()
 
 
 @app.route("/random")
 def get_random():
-  matrix.random_structure()
-  return json.dumps(matrix.current_matrix.tolist())
+  machine.random_structure()
+  return machine.Json_Repr()
 
 
-@app.route("/rewards")
-def get_rewards():
-  round_points = matrix.round_points
-  matrix.round_points = 0
-  return json.dumps(round_points)
-
-
-@app.route("/menu")
+@app.route("/gameover")
 def get_menu():
-  matrix.round_points = 0
-  return json.dumps(matrix.round_points)
-
-
-
+  machine.Game_Over()
+  return machine.Json_Repr()
 
 
 @app.route("/")

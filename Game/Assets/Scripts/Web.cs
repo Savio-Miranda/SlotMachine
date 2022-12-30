@@ -8,45 +8,17 @@ public class Web : MonoBehaviour
 {
     private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
     //private const string URL = "http://127.0.0.1:5000";
-
+    public static SlotData data = new SlotData();
+    
+    public static bool menu = false;
     private static List<string> betList = new List<string>();
-    private static List<List<int>> matrix = new List<List<int>>();
-    private static int roundPoints;
-
-    public static List<string> GetBetList()
-    {
-        return betList;
-    }
-
-    public static List<List<int>> GetResults()
-    {
-        return matrix;
-    }
-
-    public static int GetRewards()
-    {
-        return roundPoints;
-    }
-
-    public static IEnumerator GetOrderedMatrixRoutine()
-    {
-        yield return GetRequest($"{URL}/ordered");
-    }
-
-    public static IEnumerator GetRandomMatrixRoutine()
-    {
-        yield return GetRequest($"{URL}/random");
-    }
-
-    public static IEnumerator GetRewardRoutine()
-    {
-        yield return GetRequest($"{URL}/rewards");
-    }
-
-    public static IEnumerator GetBetRoutine()
-    {
-        yield return GetRequest($"{URL}/betlist");
-    }
+    public static List<string> GetBetList() { return betList; }
+    public static IEnumerator GetBetRoutine() { yield return GetRequest($"{URL}/betlist"); }
+    public static IEnumerator PutBetRoutine(string bet) { yield return PutRequest($"{URL}/bet", bet); }
+    public static IEnumerator GetStartMatrixRoutine() { yield return GetRequest($"{URL}/start"); }
+    public static IEnumerator GetOrderedMatrixRoutine() { yield return GetRequest($"{URL}/ordered"); }
+    public static IEnumerator GetRandomMatrixRoutine() { yield return GetRequest($"{URL}/random"); }
+    public static IEnumerator GetMenuRoutine() { yield return GetRequest($"{URL}/gameover"); }
 
     public static IEnumerator GetRequest(string uri)
     {
@@ -75,16 +47,30 @@ public class Web : MonoBehaviour
                     if (uri == $"{URL}/betlist")
                         betList = JsonConvert.DeserializeObject<List<string>>(jsonObject);
                     
-                    else if (uri == $"{URL}/rewards" || uri == $"{URL}/menu")
-                        roundPoints = JsonConvert.DeserializeObject<int>(jsonObject);  
-                    
                     else
                     {
-                        matrix = JsonConvert.DeserializeObject<List<List<int>>>(jsonObject);
+                        data = JsonConvert.DeserializeObject<SlotData>(jsonObject);
                     }
 
                     break;                  
             }   
+        }
+    }
+
+    public static IEnumerator PutRequest(string uri, string bet)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.PostWwwForm(uri, bet))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                Debug.Log("Upload complete!");
+            }
         }
     }
 }

@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UIBuilder/GameOver.uss?fileID=7433441132597879392&amp;guid=358567d0179b69941b3853a66a24cd48&amp;type=3#GameOver" />
+    <ui:VisualElement name="root" style="flex-grow: 1; overflow: visible; background-color: rgba(16, 0, 125, 0); align-items: center; justify-content: flex-start; align-self: auto; width: 100%; height: 100%;">
+        <ui:VisualElement name="urso-mendigo" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 80%; height: 60%; background-image: resource(&apos;CorelAssets/UrsoMendigo&apos;); -unity-background-scale-mode: scale-to-fit; align-self: auto;" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+        <ui:VisualElement name="label-area" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center; justify-content: center;">
+            <ui:Label tabindex="-1" text="* Game Over *" display-tooltip-when-elided="true" name="game-over" style="position: relative; font-size: 82px; top: auto; -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=5a626e03f650ef64d97cffffd5ac0615&amp;type=3#NotInter-Regular&apos;); -unity-font-style: bold; left: auto;" />
+            <ui:Label tabindex="-1" text="Você deve o Serasa" display-tooltip-when-elided="true" name="subtitle" style="position: relative; font-size: 54px; top: auto; -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=5a626e03f650ef64d97cffffd5ac0615&amp;type=3#NotInter-Regular&apos;); -unity-font-style: normal; left: auto;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 20%; align-items: center; justify-content: center;">
+            <ui:Button text="Menu" display-tooltip-when-elided="true" name="menu-button" class="button menu-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

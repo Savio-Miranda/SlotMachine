@@ -1,15 +1,26 @@
 import numpy as np
 
 
-class Matrix:
-    def __init__(self, lines: int, colums: int, number_of_sprites: int,  round_points = 0, current_matrix = np.zeros_like((5, 3))):
+class SlotMachine:
+    def __init__(self, lines: int, columns: int, number_of_sprites: int,  scores = 0, current_matrix = np.zeros_like((5, 3)), name = "", credits = 50, bet = 5):
+        # Machines engine
         self.lines = lines
-        self.columns = colums
+        self.columns = columns
         self.number_of_sprites = number_of_sprites
-        self.current_matrix = current_matrix
-        self.round_points = round_points
+
+        # Machine data
         self.bet_list = ["5", "10", "15", "20"]
+        self.bet = bet
+        self.current_matrix = current_matrix
+        self.scores = scores
+        self.credits = credits
         self.sequences = self.create_sequences()
+
+    
+    def start_structure(self):
+        new_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.columns, self.lines)
+        self.current_matrix = np.zeros_like(new_matrix)
+        self.Json_Repr()
 
 
     def random_structure(self):
@@ -24,13 +35,13 @@ class Matrix:
         ordered_matrix = []
 
         for i in range(self.columns):
-            suport_list = []
+            support_list = []
             index += 1
 
             for j in range(self.lines):
-                suport_list.append(index)
+                support_list.append(index)
 
-            ordered_matrix.append(suport_list)
+            ordered_matrix.append(support_list)
 
         ordered_matrix = np.array(ordered_matrix)
         self.current_matrix = ordered_matrix
@@ -43,9 +54,9 @@ class Matrix:
             sequences.update({i: [i, i, i]})
 
         return sequences
-
     
-    # retorna todos os padrões (linhas e colunas) dentro de uma matriz
+
+    # Returns all rewards found inside a matrix
     def rewards(self):
         matrix = self.current_matrix
         modified_matrix = np.reshape(matrix.ravel(order='F'), (3, 5), order='C')
@@ -56,11 +67,13 @@ class Matrix:
         for i in range(len(a)):
             all_wins.append(self.rewards_match(a[i]))
             i += 1
-        # exemplo de return => all wins:  [{}, {2: [1, 2, 3, 4]}]
+        
+        # Example: => all wins:  [{}, {2: [1, 2, 3, 4]}]
+        self.credits += self.scores
         return all_wins
 
 
-    # retorna os padrões dentro de uma matriz
+    # Returns all patterns inside a matrix
     def rewards_match(self, matrix):
         win = {}
         matrix_size = len(matrix)
@@ -68,7 +81,7 @@ class Matrix:
 
         for sequence in self.sequences:
             for i in range(matrix_size):
-                # Store sizes of input array and sequence
+                # Store input array size and sequence size
                 array_size = len(matrix[i])
                 sequence_size = len(self.sequences[sequence])
 
@@ -83,10 +96,24 @@ class Matrix:
                     obj = (np.where(np.convolve(Match, np.ones(sequence_size, dtype=int)) > 0)[0].tolist(), multiplier)
                     win.update({i: obj})
 
+        # Adding the acquired sprite based points this round on credits and round_points
+        # Both variables (credits and round_points will be shown individually on Slot Machine's screen in Unity)
+
         for k in win:
             pattern, image = len(win[k][0]), win[k][1]
-            print(f"pattern: {pattern}   |   image: {image}")
-
-            self.round_points += pattern * image
+            self.scores += pattern * image
 
         return win
+
+    def Json_Repr(self):
+        obj = {"matrix": self.current_matrix.tolist(), "scores": self.scores, "credits": self.credits}
+        self.scores = 0
+        return obj
+
+    def Game_Over(self):
+        if self.credits <= 5:
+            self.credits = 50
+            self.start_structure()
+        return
+            
+
