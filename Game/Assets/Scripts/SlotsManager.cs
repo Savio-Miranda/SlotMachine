@@ -168,11 +168,7 @@ public class SlotsManager : MonoBehaviour
     public void Menu(ClickEvent evt)
     {
         coroutineStarter.StartCoroutine(Web.GetMenuRoutine());
-        if (Web.menu)
-        {
-            SceneManager.LoadScene("MenuScene");
-        }
-
+        SceneManager.LoadScene("MenuScene");
     }
     //_______________________________________________________________________ EVENT AREA
 
