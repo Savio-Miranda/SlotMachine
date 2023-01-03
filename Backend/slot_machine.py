@@ -7,7 +7,6 @@ class SlotMachine:
         self.lines = lines
         self.columns = columns
         self.number_of_sprites = number_of_sprites
-        self.reset_machine = False
 
         # Machine data
         self.bet_list = [5, 10, 15, 20]
@@ -22,8 +21,6 @@ class SlotMachine:
         new_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.columns, self.lines)
         self.current_matrix = np.zeros_like(new_matrix)
         self.slot_machine_data()
-        self.reset_machine = False
-        return self.reset_machine
 
 
     def random_structure(self):

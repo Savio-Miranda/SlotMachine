@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 from slot_machine import SlotMachine
 import json
 
@@ -7,6 +8,8 @@ machine = SlotMachine(3, 5, 12)
 
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route("/bet", methods=["POST"])
@@ -27,6 +30,7 @@ def get_start():
   machine.start_structure()
   return machine.slot_machine_data()
 
+
 @app.route("/ordered")
 def get_ordered():
   machine.ordered_structure()
@@ -38,7 +42,6 @@ def get_ordered():
 @app.route("/random")
 def get_random():
   machine.random_structure()
-  print(f"bet: {machine.bet}  < smaller_bet: {machine.bet_list[0]} ? {machine.bet < machine.bet_list[0]}")
   if machine.bet < machine.bet_list[0]:
     safety_game_over()
   return machine.slot_machine_data()

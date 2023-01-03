@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 
 public class Web : MonoBehaviour
 {
-    //private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
-    private const string URL = "http://127.0.0.1:5000";
+    private const string URL = "https://Server-Slot-Machine.saviomiranda.repl.co";
+    //private const string URL = "http://127.0.0.1:5000";
     public static SlotData data = new SlotData();
     
     public static bool menu = false;

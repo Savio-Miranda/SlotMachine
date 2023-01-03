@@ -32,8 +32,8 @@ public class SlotsManager : MonoBehaviour
 
         // Screen objects
         screen = document.rootVisualElement.Q<VisualElement>("screen");
-        scores = document.rootVisualElement.Q<IntegerField>("points");
         credits = document.rootVisualElement.Q<IntegerField>("credits");
+        scores = document.rootVisualElement.Q<IntegerField>("points");
 
         // Start buttons
         backMenuButton = document.rootVisualElement.Q<Button>("back-button");
@@ -45,7 +45,7 @@ public class SlotsManager : MonoBehaviour
         patternButton.RegisterCallback<ClickEvent>(Pattern);
         backMenuButton.RegisterCallback<ClickEvent>(Menu);
 
-        GameOver.OnReturningToMenu += TestGameOver;
+        GameOver.OnReturningToMenu += ResetSlotData;
     }
     //_______________________________________________________________________ UNITY PATTERN AREA
 
@@ -77,12 +77,14 @@ public class SlotsManager : MonoBehaviour
     {
         coroutineStarter.StartCoroutine(Web.PutBetRoutine(bet));
     }
-    //_______________________________________________________________________ ROUTINE AREA
 
-    private void TestGameOver()
+    private void ResetSlotData()
     {
         coroutineStarter.StartCoroutine(DataRoutine(Web.GetMenuRoutine()));
     }
+
+    //_______________________________________________________________________ ROUTINE AREA
+
     private void SetSlotData()
     {
         coroutineStarter.StartCoroutine(DataRoutine(Web.GetStartMatrixRoutine()));
