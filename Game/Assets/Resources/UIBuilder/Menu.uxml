@@ -1,9 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UIBuilder/Menu.uss?fileID=7433441132597879392&amp;guid=6ccf3dee7639c504c83a5c566000c336&amp;type=3#Menu" />
-    <ui:VisualElement name="base" style="height: 100%; width: 100%; justify-content: center; background-color: rgb(170, 218, 255); align-items: center; background-image: none; -unity-background-scale-mode: scale-and-crop;">
-        <ui:VisualElement name="Logo" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; height: 346px; top: 4px; width: 445px; left: 2px; background-image: resource(&apos;CorelAssets/Logo&apos;); -unity-background-scale-mode: scale-and-crop;" />
-        <ui:VisualElement name="main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;CorelAssets/Main&apos;); -unity-background-scale-mode: scale-to-fit; position: absolute; height: 658px; top: 197px; width: 658px; left: 21px;" />
-        <ui:Button text="Begin" display-tooltip-when-elided="true" name="begin-button" class="button begin-button" style="display: flex; position: absolute; height: 72px; top: 588px; left: 372px; width: 255px;" />
-        <ui:VisualElement name="Biscoito" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 152px; width: 136px; position: absolute; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;CorelAssets/Biscoito&apos;); top: 617px; left: 534px;" />
+    <Style src="project://database/Assets/Resources/UIBuilder/Menu.uss?fileID=7433441132597879392&amp;guid=6ccf3dee7639c504c83a5c566000c336&amp;type=3#Menu" />
+    <ui:VisualElement name="base" style="height: 100%; width: 100%; justify-content: center; background-color: rgb(170, 218, 255); align-items: center; background-image: none; -unity-background-scale-mode: scale-to-fit; flex-direction: row; align-self: center;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 90%; height: 90%; max-width: 90%; background-image: resource(&apos;CorelAssets/Main&apos;); -unity-background-scale-mode: scale-to-fit; flex-direction: row; position: relative;">
+            <ui:VisualElement name="Logo" usage-hints="None" style="background-image: resource(&apos;CorelAssets/Logo&apos;); -unity-background-scale-mode: scale-to-fit; height: 50%; width: 30%; align-items: flex-start; position: relative; max-width: 30%;" />
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-items: center; justify-content: center; width: 70%; height: 100%;">
+                <ui:Button text="Begin" display-tooltip-when-elided="true" name="begin-button" class="button begin-button" style="display: flex; position: relative; height: 70px; width: 300px; overflow: visible; top: 17%; left: 6%;" />
+                <ui:VisualElement name="cookie" style="background-image: resource(&apos;CorelAssets/Biscoito&apos;); height: 250px; width: 146px; -unity-background-scale-mode: scale-to-fit; position: relative; top: 37%; right: 5%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -2,14 +2,15 @@ import numpy as np
 
 
 class SlotMachine:
-    def __init__(self, lines: int, columns: int, number_of_sprites: int,  scores = 0, current_matrix = np.zeros_like((5, 3)), name = "", credits = 50, bet = 5):
+    def __init__(self, lines: int, columns: int, number_of_sprites: int,  scores = 0, current_matrix = np.zeros_like((5, 3)), name = "", credits = 500, bet = 5):
         # Machines engine
         self.lines = lines
         self.columns = columns
         self.number_of_sprites = number_of_sprites
+        self.reset_machine = False
 
         # Machine data
-        self.bet_list = ["5", "10", "15", "20"]
+        self.bet_list = [5, 10, 15, 20]
         self.bet = bet
         self.current_matrix = current_matrix
         self.scores = scores
@@ -20,7 +21,9 @@ class SlotMachine:
     def start_structure(self):
         new_matrix = np.random.randint(0, self.number_of_sprites, 15).reshape(self.columns, self.lines)
         self.current_matrix = np.zeros_like(new_matrix)
-        self.Json_Repr()
+        self.slot_machine_data()
+        self.reset_machine = False
+        return self.reset_machine
 
 
     def random_structure(self):
@@ -31,6 +34,10 @@ class SlotMachine:
 
     # This method allow the game to get a pre-ordered pattern
     def ordered_structure(self):
+        
+        # TESTING
+        # ordered_matrix = [[1, 0, 1], [1, 1, 1], [1, 0, 11], [1, 0, 11], [1, 0, 11]]
+
         index = 0
         ordered_matrix = []
 
@@ -78,13 +85,11 @@ class SlotMachine:
         win = {}
         matrix_size = len(matrix)
 
-
         for sequence in self.sequences:
             for i in range(matrix_size):
                 # Store input array size and sequence size
                 array_size = len(matrix[i])
                 sequence_size = len(self.sequences[sequence])
-
                 range_of_sequence = np.arange(sequence_size)
 
                 # Create a 2D array of sliding indices across the entire length of input array.
@@ -92,28 +97,25 @@ class SlotMachine:
                 Match = (matrix[i][np.arange(array_size - sequence_size + 1)[:, None] + range_of_sequence] == sequence).all(1)
 
                 if Match.any():
-                    multiplier = int(np.array(matrix[i][0]))
+                    multiplier = int(np.bincount(matrix[i]).argmax())
                     obj = (np.where(np.convolve(Match, np.ones(sequence_size, dtype=int)) > 0)[0].tolist(), multiplier)
                     win.update({i: obj})
 
         # Adding the acquired sprite based points this round on credits and round_points
         # Both variables (credits and round_points will be shown individually on Slot Machine's screen in Unity)
-
         for k in win:
             pattern, image = len(win[k][0]), win[k][1]
-            self.scores += pattern * image
+            print(f"pattern: {pattern}, image: {image}")
+            self.scores += pattern * image * self.bet
 
         return win
 
-    def Json_Repr(self):
+    def slot_machine_data(self):
         obj = {"matrix": self.current_matrix.tolist(), "scores": self.scores, "credits": self.credits}
         self.scores = 0
         return obj
 
-    def Game_Over(self):
-        if self.credits <= 5:
-            self.credits = 50
-            self.start_structure()
+    def game_over(self):
+        self.credits = 500
+        self.start_structure()
         return
-            
-

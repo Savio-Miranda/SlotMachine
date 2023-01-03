@@ -3,7 +3,7 @@ from slot_machine import SlotMachine
 import json
 
 
-machine = SlotMachine(3, 5, 11)
+machine = SlotMachine(3, 5, 12)
 
 
 app = Flask(__name__)
@@ -11,11 +11,10 @@ app = Flask(__name__)
 
 @app.route("/bet", methods=["POST"])
 def post_bet():
-  # if request.method == "POST":
-  tudo_isso_pra_chegar_num_numero = int(list(request.form.keys())[0])
-  machine.bet = tudo_isso_pra_chegar_num_numero
+  received_bet = int(list(request.form.keys())[0])
+  machine.bet = received_bet
   machine.credits -= machine.bet
-  return "201"
+  return "201", 201
 
 
 @app.route("/betlist")
@@ -26,24 +25,28 @@ def get_betlist():
 @app.route("/start")
 def get_start():
   machine.start_structure()
-  return machine.Json_Repr()
+  return machine.slot_machine_data()
 
 @app.route("/ordered")
 def get_ordered():
   machine.ordered_structure()
-  return machine.Json_Repr()
+  if machine.bet < machine.bet_list[0]:
+    check_game_over()
+  return machine.slot_machine_data()
 
 
 @app.route("/random")
 def get_random():
   machine.random_structure()
-  return machine.Json_Repr()
+  if machine.bet < machine.bet_list[0]:
+    check_game_over()
+  return machine.slot_machine_data()
 
 
 @app.route("/gameover")
 def get_menu():
-  machine.Game_Over()
-  return machine.Json_Repr()
+  machine.game_over()
+  return machine.slot_machine_data()
 
 
 @app.route("/")
@@ -51,5 +54,11 @@ def get_ready():
   return "ready"
 
 
+def check_game_over():
+  machine.game_over()
+  if machine.reset_machine is True:
+    return app.redirect("/gameover", 302)
+
+
 if __name__ == "__main__":
-  app.run(host="0.0.0.0")
+  app.run(host="0.0.0.0", debug=True)
