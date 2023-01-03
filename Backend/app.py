@@ -31,15 +31,16 @@ def get_start():
 def get_ordered():
   machine.ordered_structure()
   if machine.bet < machine.bet_list[0]:
-    check_game_over()
+    safety_game_over()
   return machine.slot_machine_data()
 
 
 @app.route("/random")
 def get_random():
   machine.random_structure()
+  print(f"bet: {machine.bet}  < smaller_bet: {machine.bet_list[0]} ? {machine.bet < machine.bet_list[0]}")
   if machine.bet < machine.bet_list[0]:
-    check_game_over()
+    safety_game_over()
   return machine.slot_machine_data()
 
 
@@ -54,10 +55,9 @@ def get_ready():
   return "ready"
 
 
-def check_game_over():
+def safety_game_over():
   machine.game_over()
-  if machine.reset_machine is True:
-    return app.redirect("/gameover", 302)
+  return app.redirect("/gameover", 302)
 
 
 if __name__ == "__main__":

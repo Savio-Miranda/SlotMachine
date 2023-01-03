@@ -103,7 +103,7 @@ public class SlotsManager : MonoBehaviour
         List<List<int>> matrix = null;
         yield return routine;
         
-        if (Web.data.credits <= 5) { SceneManager.LoadScene("GameOverScene"); }
+        if (Web.data.credits < 5) { SceneManager.LoadScene("GameOverScene"); }
         credits.value = Web.data.credits;
         scores.value = Web.data.scores;
         matrix = Web.data.matrix;

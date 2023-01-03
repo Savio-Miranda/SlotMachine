@@ -2,7 +2,7 @@ import numpy as np
 
 
 class SlotMachine:
-    def __init__(self, lines: int, columns: int, number_of_sprites: int,  scores = 0, current_matrix = np.zeros_like((5, 3)), name = "", credits = 500, bet = 5):
+    def __init__(self, lines: int, columns: int, number_of_sprites: int,  scores = 0, current_matrix = np.zeros_like((5, 3)), name = "", credits = 50, bet = 5):
         # Machines engine
         self.lines = lines
         self.columns = columns
@@ -116,6 +116,6 @@ class SlotMachine:
         return obj
 
     def game_over(self):
-        self.credits = 500
+        self.credits = 50
         self.start_structure()
         return
